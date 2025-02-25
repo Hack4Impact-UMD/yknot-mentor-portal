@@ -1,0 +1,30 @@
+.sidebar-tile {
+  display: flex;
+  gap: 1em;
+  padding: 1em;
+  align-items: center;
+  color: #10275b;
+  border-radius: 40px 0 0 40px;
+  margin-left: 20px;
+}
+
+.sidebar-tile.selected:hover {
+  cursor: default;
+}
+
+.sidebar-tile:hover:not(.selected) {
+  background-color: hsl(222, 70%, 97%);
+  cursor: pointer;
+}
+
+.sidebar-tile.selected {
+  background-color: #10275b;
+  color:white;
+}
+
+.sidebar-tile .img-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 60px;
+
+}
