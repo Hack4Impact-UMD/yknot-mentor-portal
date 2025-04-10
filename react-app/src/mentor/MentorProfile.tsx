@@ -1,26 +1,22 @@
-import { useState, useEffect } from "react";
 import {
-  QuerySnapshot,
   DocumentData,
   DocumentSnapshot,
+  QuerySnapshot,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import NetworkManager, { Endpoints } from "../network/NetworkManager";
-import {
-  Applicant,
-  JotformResponse,
-  MenteeForm,
-  MenteeFormNotes,
-} from "../utils/utils";
 import close from "../profile/assets/close.png";
+import { Applicant, JotformResponse, MenteeFormNotes } from "../utils/utils";
 
-import MentorInfo from "./Tabs/MentorInfo/MentorInfo";
-import Mentee from "./Tabs/Mentee/Mentee";
 import LogsReports from "./Tabs/LogsReports/LogsReports";
+import Mentee from "./Tabs/Mentee/Mentee";
+import MentorInfo from "./Tabs/MentorInfo/MentorInfo";
 
-import "./MentorProfile.css";
 import Loading from "../widgets/Loading";
+import { Modal } from "../widgets/Modal";
+import "./MentorProfile.css";
 
 export enum Tabs {
   MentorInfo = "Your Profile",
@@ -41,6 +37,7 @@ const MentorProfile: React.FC<Props> = ({ defaultTab }) => {
   const [applicant, setApplicant] = useState<Applicant | null>(null);
   const [formData, setFormData] = useState<JotformResponse | null>(null);
   const [menteeList, setMenteeList] = useState<ExtendedMenteeForm[]>([]);
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
 
   const [tab, setTab] = useState<string>(defaultTab);
 
@@ -176,12 +173,33 @@ const MentorProfile: React.FC<Props> = ({ defaultTab }) => {
         return null;
     }
   };
+  const deleteMentor = async () => {
+    try {
+      await NetworkManager.makeRequest(Endpoints.DeleteMentor, {
+        id: mentorId,
+      });
+      window.location.href = "/admin/home";
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!applicant || !menteeList || !formData) {
     return <Loading />;
   }
   return (
     <div className="mentor-profile">
+      {deleteModal && (
+        <Modal
+          title="Delete Mentor"
+          content={`Are you sure you wish to delete this mentor?`}
+          onConfirm={() => deleteMentor()}
+          onCancel={() => {
+            setDeleteModal(false);
+          }}
+        />
+      )}
+
       {/* Close button */}
       <img className="exit-btn" src={close} onClick={() => navigate(-1)} />
 
@@ -191,7 +209,15 @@ const MentorProfile: React.FC<Props> = ({ defaultTab }) => {
           {applicant.firstName} {applicant.lastName}
         </h1>
         {/* Tabs */}
-        <div className="mentor-profile-tabs">{renderTabs(tab)}</div>
+        <div className="mentor-profile-tabs-container">
+          <div className="mentor-profile-tabs">{renderTabs(tab)}</div>
+          <button
+            className="mentor-profile-delete-button"
+            onClick={() => setDeleteModal(true)}
+          >
+            Delete Mentor
+          </button>
+        </div>
         {/* Tab Content */}
         <section className="tab-content-wrapper">
           {getTabContents(tab, formData, menteeList)}

@@ -7,8 +7,7 @@
   justify-content: center;
 }
 
-.t-profile
-.exit-btn {
+.t-profile .exit-btn {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -16,13 +15,11 @@
   height: 53px;
 }
 
-.t-profile
-.exit-btn:hover {
+.t-profile .exit-btn:hover {
   cursor: pointer;
 }
 
-.t-profile
-.t-profile-container {
+.t-profile .t-profile-container {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -35,13 +32,11 @@
   -ms-overflow-style: none;
 }
 
-.t-profile
-.t-profile-container::-webkit-scrollbar {
+.t-profile .t-profile-container::-webkit-scrollbar {
   display: none;
 }
 
-.t-profile
-.t-profile-header {
+.t-profile .t-profile-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -50,15 +45,13 @@
   margin-top: 64px;
 }
 
-.t-profile
-.t-profile-header .t-profile-header-left {
+.t-profile .t-profile-header .t-profile-header-left {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.t-profile
-.t-profile-header .t-profile-header-left .name {
+.t-profile .t-profile-header .t-profile-header-left .name {
   color: #10275b;
   font-size: 40px;
   font-weight: bold;
@@ -70,15 +63,13 @@
   overflow: auto;
 }
 
-.t-profile
-.t-profile-header .t-profile-header-right {
+.t-profile .t-profile-header .t-profile-header-right {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.t-profile
-.t-profile-header .t-profile-header-right .button {
+.t-profile .t-profile-header .t-profile-header-right .button {
   width: 210px;
   height: 50px;
   font-weight: bold;
@@ -92,34 +83,55 @@
   border-radius: 20px;
 }
 
-.t-profile
-.t-profile-header .t-profile-header-right .button>img {
+.t-profile .t-profile-header .t-profile-header-right .button > img {
   width: 32px;
   height: 32px;
   margin-left: 20px;
 }
 
-.t-profile
-.t-profile-tabs {
+.t-profile .t-profile-tabs {
   display: flex;
   flex-direction: row;
   margin-top: 20px;
 }
 
-.t-profile
-.t-profile-tabs .tab-title:hover {
+.t-profile .t-profile-tabs .tab-title:hover {
   cursor: pointer;
   color: black;
 }
 
-.t-profile
-.t-profile-tabs .tab-title {
+.t-profile .t-profile-tabs .tab-title {
   margin-right: 50px;
   font-size: 24px;
 }
 
-.t-profile
-.t-profile-tabs .selected {
+.t-profile .t-profile-tabs .selected {
   padding-bottom: 5px;
   border-bottom: 2px solid black;
+}
+.t-profile-tabs-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.t-profile-delete-button {
+  width: 180px;
+  height: 40px;
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background-color: #f44250;
+}
+
+.t-profile-delete-button:hover {
+  background-color: #d03945;
+  cursor: pointer;
 }

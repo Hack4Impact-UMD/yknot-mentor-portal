@@ -1,47 +1,41 @@
 import { AuthError, User } from "@firebase/auth";
 import {
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   getAuth,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
   updateEmail,
   updatePassword,
-  sendPasswordResetEmail,
 } from "firebase/auth";
 import {
-  doc,
+  arrayRemove,
+  arrayUnion,
   collection,
+  deleteDoc,
+  doc,
+  DocumentData,
+  DocumentSnapshot,
   getDoc,
   getDocs,
-  arrayUnion,
-  DocumentData,
-  FirestoreError,
-  DocumentSnapshot,
-  QuerySnapshot,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
   orderBy,
-  limit,
-  arrayRemove,
+  query,
+  QuerySnapshot,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 
+import { httpsCallable } from "firebase/functions";
+import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import app, { db, functions, storage } from "../config/firebase";
+import secondaryApp from "../config/secondaryFirebase";
 import {
   Applicant,
   ApplicantStages,
+  AssignmentsTabPerson,
   JotformResponse,
   Mentor,
   Trainee,
-  AssignmentsTabPerson,
 } from "../utils/utils";
-import app, { db, storage, functions } from "../config/firebase";
-import secondaryApp from "../config/secondaryFirebase";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
-import { getFunctions, httpsCallable } from "firebase/functions";
-import UserInformation from "../profile/UserInformation/UserInformation";
-import { resolve } from "dns";
-import { rejects } from "assert";
 
 export enum Endpoints {
   AuthenticateUser,
@@ -82,6 +76,7 @@ export enum Endpoints {
   GetScheduledInterview,
   SendPasswordResetEmail,
   SendNewAccountCreatedEmail,
+  DeleteMentor,
 }
 
 class NetworkManager {
@@ -196,9 +191,39 @@ class NetworkManager {
         return this.sendResetPasswordEmail(params.email);
       case Endpoints.SendNewAccountCreatedEmail:
         return this.sendNewAccountCreatedEmail(params.email, params.password);
+      case Endpoints.DeleteMentor:
+        return this.deleteMentor(params.id);
       default:
         return;
     }
+  }
+
+  private deleteMentor(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const user = getAuth(app).currentUser;
+      if (!user) {
+        reject();
+      }
+      getDoc(doc(db, "applicants", id))
+        .then(async (snap) => {
+          const updatePromises: Promise<any>[] = [];
+          snap.data()?.mentee_ids?.forEach((menteeId: string) => {
+            updatePromises.push(
+              updateDoc(doc(db, "mentees", menteeId), {
+                matched: false,
+                priorMentors: arrayUnion({
+                  name: snap.data()?.first_name + " " + snap.data()?.last_name,
+                  notes: "Mentor Deleted",
+                }),
+              })
+            );
+          });
+          updatePromises.push(deleteDoc(doc(db, "applicants", id)));
+          await Promise.all(updatePromises);
+          resolve();
+        })
+        .catch((e) => console.log(e));
+    });
   }
   // gets a user from db by submission id
   // submissionId: submission id

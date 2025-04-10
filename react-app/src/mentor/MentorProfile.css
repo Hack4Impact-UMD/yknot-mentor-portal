@@ -12,7 +12,7 @@
   width: 3em;
   height: 3em;
 }
-  
+
 .mentor-profile .exit-btn:hover {
   cursor: pointer;
   filter: brightness(0.8);
@@ -30,13 +30,13 @@
   margin: 0;
   margin-top: 1em;
 }
-  
+
 /* Tabs: Your Profile, Mentee Profile, Logs & Reports */
 .mentor-profile .mentor-profile-tabs {
   display: flex;
   margin-left: 1.5em;
 }
-  
+
 .mentor-profile .mentor-profile-tabs .tab-title {
   margin: 2em 4em 1em 0;
   font-size: 1.2em;
@@ -45,7 +45,7 @@
 .mentor-profile .mentor-profile-tabs .tab-title:hover {
   cursor: pointer;
 }
-  
+
 .mentor-profile .mentor-profile-tabs .selected {
   padding-bottom: 5px;
   border-bottom: 2px solid black;
@@ -56,6 +56,33 @@
   background-color: #ececec;
   border-radius: 1.5em;
   height: 80%;
-  border: 1px solid #ececec;/* Not sure why this is necessary. Have never seen such weirdness in all my time working with CSS. */
+  border: 1px solid #ececec; /* Not sure why this is necessary. Have never seen such weirdness in all my time working with CSS. */
   position: relative;
+}
+
+.mentor-profile-tabs-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mentor-profile-delete-button {
+  width: 180px;
+  height: 40px;
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background-color: #f44250;
+}
+
+.mentor-profile-delete-button:hover {
+  background-color: #d03945;
+  cursor: pointer;
 }
